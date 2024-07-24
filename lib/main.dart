@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'QuestionBrain.dart';
 
+Questionbrain questionbrain = Questionbrain();
 void main() => runApp(Quizzler());
 
 class Quizzler extends StatelessWidget {
@@ -25,12 +27,14 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  //Testing
+  String pageName = "questionPage";
   List<Widget> scoreKeeper = [];
-  List<String> questionList = [
-    'You can lead a cow down stairs but not up stairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s  blood is green.'
-  ];
+  // List<String> questionList = [
+  //   'You can lead a cow down stairs but not up stairs.',
+  //   'Approximately one quarter of human bones are in the feet.',
+  //   'A slug\'s  blood is green.'
+  // ];
 
   int questionNumber = 0;
   late String currentQuestion;
@@ -39,7 +43,7 @@ class _QuizPageState extends State<QuizPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    currentQuestion = questionList.first;
+    // currentQuestion = questionList.first;
   }
 
   @override
@@ -54,7 +58,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questionList[questionNumber],
+                questionbrain.questionAnsList[questionNumber].text,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
@@ -80,13 +84,32 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 //The user picked true.
                 setState(() {
-                  scoreKeeper.add(
-                    const Icon(
-                      Icons.check,
-                      color: Colors.green,
-                    ),
-                  );
+                  printInLog("before if questionNumber", questionNumber);
+                  if (questionNumber <=
+                      questionbrain.questionAnsList.length - 1) {
+                    if (checkAnswerRight(questionNumber, true)) {
+                      scoreKeeper.add(
+                        const Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        ),
+                      );
+                    } else {
+                      scoreKeeper.add(
+                        const Icon(
+                          Icons.close,
+                          color: Colors.red,
+                        ),
+                      );
+                    }
+                  }
+                  // if (questionNumber < questionAnsList.length - 1) {
                   questionNumber++;
+                  // }
+
+                  printInLog("questionNumber", questionNumber);
+                  printInLog("questionAnsList Length=",
+                      (questionbrain.questionAnsList.length - 1));
                 });
               },
             ),
@@ -109,13 +132,24 @@ class _QuizPageState extends State<QuizPage> {
                 //The user picked false.
 
                 setState(() {
-                  scoreKeeper.add(
-                    const Icon(
-                      Icons.close,
-                      color: Colors.red,
-                    ),
-                  );
-                  if (questionNumber < questionList.length - 1) {
+                  if (questionNumber <
+                      questionbrain.questionAnsList.length - 1) {
+                    if (checkAnswerRight(questionNumber, false)) {
+                      scoreKeeper.add(
+                        const Icon(
+                          Icons.check,
+                          color: Colors.green,
+                        ),
+                      );
+                    } else {
+                      scoreKeeper.add(
+                        const Icon(
+                          Icons.close,
+                          color: Colors.red,
+                        ),
+                      );
+                    }
+
                     questionNumber++;
                   }
                 });
@@ -130,6 +164,14 @@ class _QuizPageState extends State<QuizPage> {
         )
       ],
     );
+  }
+
+  bool checkAnswerRight(int questionNumber, bool userOption) {
+    return questionbrain.questionAnsList[questionNumber].answer == userOption;
+  }
+
+  void printInLog(String data, int value) {
+    print('$pageName $data $value');
   }
 }
 

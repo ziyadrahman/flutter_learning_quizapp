@@ -36,7 +36,6 @@ class _QuizPageState extends State<QuizPage> {
   //   'A slug\'s  blood is green.'
   // ];
 
-  int questionNumber = 0;
   late String currentQuestion;
 
   @override
@@ -58,7 +57,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: const EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questionbrain.questionAnsList[questionNumber].text,
+                questionbrain.questionText,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
@@ -84,33 +83,31 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 //The user picked true.
                 setState(() {
-                  printInLog("before if questionNumber", questionNumber);
-                  if (questionNumber <=
-                      questionbrain.questionAnsList.length - 1) {
-                    if (checkAnswerRight(questionNumber, true)) {
-                      scoreKeeper.add(
-                        const Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        ),
-                      );
-                    } else {
-                      scoreKeeper.add(
-                        const Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        ),
-                      );
-                    }
-                  }
-                  // if (questionNumber < questionAnsList.length - 1) {
-                  questionNumber++;
-                  // }
+                  printInLog(
+                      "before if questionNumber", questionbrain.questionNumber);
 
-                  printInLog("questionNumber", questionNumber);
-                  printInLog("questionAnsList Length=",
-                      (questionbrain.questionAnsList.length - 1));
-                });
+                  if (questionbrain.questionAnswer == true) {
+                    scoreKeeper.add(
+                      const Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
+                    );
+                  } else {
+                    scoreKeeper.add(
+                      const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+                  questionbrain.nextQuestion();
+                }
+                    // if (questionNumber < questionAnsList.length - 1) {
+
+                    // }
+
+                    );
               },
             ),
           ),
@@ -132,26 +129,23 @@ class _QuizPageState extends State<QuizPage> {
                 //The user picked false.
 
                 setState(() {
-                  if (questionNumber <
-                      questionbrain.questionAnsList.length - 1) {
-                    if (checkAnswerRight(questionNumber, false)) {
-                      scoreKeeper.add(
-                        const Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        ),
-                      );
-                    } else {
-                      scoreKeeper.add(
-                        const Icon(
-                          Icons.close,
-                          color: Colors.red,
-                        ),
-                      );
-                    }
-
-                    questionNumber++;
+                  if (questionbrain.questionAnswer == false) {
+                    scoreKeeper.add(
+                      const Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ),
+                    );
+                  } else {
+                    scoreKeeper.add(
+                      const Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ),
+                    );
                   }
+
+                  questionbrain.nextQuestion();
                 });
               },
             ),
@@ -166,9 +160,9 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  bool checkAnswerRight(int questionNumber, bool userOption) {
-    return questionbrain.questionAnsList[questionNumber].answer == userOption;
-  }
+  // bool checkAnswerRight(int questionNumber, bool userOption) {
+  //   // return questionbrain.questionAnsList[questionNumber].answer == userOption;
+  // }
 
   void printInLog(String data, int value) {
     print('$pageName $data $value');

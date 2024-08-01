@@ -81,33 +81,12 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
+                checkAnswer(true);
                 //The user picked true.
-                setState(() {
-                  printInLog(
-                      "before if questionNumber", questionbrain.questionNumber);
 
-                  if (questionbrain.questionAnswer == true) {
-                    scoreKeeper.add(
-                      const Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ),
-                    );
-                  } else {
-                    scoreKeeper.add(
-                      const Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ),
-                    );
-                  }
-                  questionbrain.nextQuestion();
-                }
-                    // if (questionNumber < questionAnsList.length - 1) {
+                // if (questionNumber < questionAnsList.length - 1) {
 
-                    // }
-
-                    );
+                // }
               },
             ),
           ),
@@ -127,26 +106,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-
-                setState(() {
-                  if (questionbrain.questionAnswer == false) {
-                    scoreKeeper.add(
-                      const Icon(
-                        Icons.check,
-                        color: Colors.green,
-                      ),
-                    );
-                  } else {
-                    scoreKeeper.add(
-                      const Icon(
-                        Icons.close,
-                        color: Colors.red,
-                      ),
-                    );
-                  }
-
-                  questionbrain.nextQuestion();
-                });
+                checkAnswer(false);
               },
             ),
           ),
@@ -166,6 +126,29 @@ class _QuizPageState extends State<QuizPage> {
 
   void printInLog(String data, int value) {
     print('$pageName $data $value');
+  }
+
+  void checkAnswer(bool userPickedAnswer) {
+    setState(() {
+      printInLog("before if questionNumber", questionbrain.questionNumber);
+
+      if (questionbrain.questionAnswer == userPickedAnswer) {
+        scoreKeeper.add(
+          const Icon(
+            Icons.check,
+            color: Colors.green,
+          ),
+        );
+      } else {
+        scoreKeeper.add(
+          const Icon(
+            Icons.close,
+            color: Colors.red,
+          ),
+        );
+      }
+      questionbrain.nextQuestion();
+    });
   }
 }
 

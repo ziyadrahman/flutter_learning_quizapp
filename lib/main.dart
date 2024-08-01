@@ -132,21 +132,16 @@ class _QuizPageState extends State<QuizPage> {
     setState(() {
       printInLog("before if questionNumber", questionbrain.questionNumber);
 
-      if (questionbrain.questionAnswer == userPickedAnswer) {
-        scoreKeeper.add(
-          const Icon(
-            Icons.check,
-            color: Colors.green,
-          ),
-        );
-      } else {
-        scoreKeeper.add(
-          const Icon(
-            Icons.close,
-            color: Colors.red,
-          ),
-        );
-      }
+      //Ternary Operator Added
+      //          Condition Checking.............................
+      Icon icon = questionbrain.questionAnswer == userPickedAnswer
+          //IF TRUE..........................................
+          ? const Icon(Icons.check, color: Colors.green)
+          //IF FALSE........................................
+          : const Icon(Icons.close, color: Colors.red);
+
+      scoreKeeper.add(icon);
+
       questionbrain.nextQuestion();
     });
   }

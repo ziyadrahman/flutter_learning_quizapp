@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:quizzlerflutterlearning/common.dart';
 import 'QuestionBrain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 Questionbrain questionbrain = Questionbrain();
+Common commonMethods = Common();
 void main() => runApp(Quizzler());
 
 class Quizzler extends StatelessWidget {
@@ -12,7 +15,7 @@ class Quizzler extends StatelessWidget {
         backgroundColor: Colors.grey.shade900,
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: QuizPage(),
           ),
         ),
@@ -129,21 +132,43 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void checkAnswer(bool userPickedAnswer) {
-    setState(() {
-      printInLog("before if questionNumber", questionbrain.questionNumber);
+    if (questionbrain.questionNumber <= questionbrain.questionSize - 1) {
+      commonMethods.printInLog(
+          'QuestionArray', 'Question List Size', questionbrain.questionSize);
 
-      //Ternary Operator Added
-      //          Condition Checking.............................
-      Icon icon = questionbrain.questionAnswer == userPickedAnswer
-          //IF TRUE..........................................
-          ? const Icon(Icons.check, color: Colors.green)
-          //IF FALSE........................................
-          : const Icon(Icons.close, color: Colors.red);
+      commonMethods.printInLog('QuestionArray', 'Current Question Number',
+          questionbrain.questionNumber);
 
-      scoreKeeper.add(icon);
+      setState(() {
+        if (questionbrain.isFinished()) {
+          questionbrain.reset();
+          scoreKeeper.clear();
+          _onBasicAlertPressed(context);
+        } else {
+          printInLog("before if questionNumber", questionbrain.questionNumber);
 
-      questionbrain.nextQuestion();
-    });
+          //Ternary Operator Added
+          //          Condition Checking.............................
+          Icon icon = questionbrain.questionAnswer == userPickedAnswer
+              //IF TRUE..........................................
+              ? const Icon(Icons.check, color: Colors.green)
+              //IF FALSE........................................
+              : const Icon(Icons.close, color: Colors.red);
+
+          scoreKeeper.add(icon);
+
+          questionbrain.nextQuestion();
+        }
+      });
+    }
+  }
+
+  void _onBasicAlertPressed(BuildContext context) {
+    Alert(
+      context: context,
+      title: "Quiz End",
+      desc: "Tap Cancel To Restart Quiz.",
+    ).show();
   }
 }
 

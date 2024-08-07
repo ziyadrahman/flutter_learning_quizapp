@@ -1,7 +1,10 @@
 import 'Question.dart';
+import 'common.dart';
 
 class Questionbrain {
   int questionNumber = 0;
+
+  Common commonMethods = Common();
 
   //Private Variable defined by (_)underscore which is not accessible for other classes
   final List<Question> _questionAnsList = [
@@ -37,9 +40,25 @@ class Questionbrain {
   // int get questionNumber => _questionNumber;
   bool get questionAnswer => _questionAnsList[questionNumber].answer;
 
+  int get questionSize => _questionAnsList.length;
+
   void nextQuestion() {
     if (questionNumber < _questionAnsList.length - 1) {
       questionNumber++;
     }
+  }
+
+  bool isFinished() {
+    if (questionSize - 1 == questionNumber) {
+      commonMethods.printInLog('questionBrain', 'isQuestionFinished', 1);
+      return true;
+    } else {
+      commonMethods.printInLog('questionBrain', 'isQuestionFinished', 0);
+      return false;
+    }
+  }
+
+  void reset() {
+    questionNumber = 0;
   }
 }
